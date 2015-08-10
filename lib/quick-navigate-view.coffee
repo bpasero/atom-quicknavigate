@@ -1,22 +1,40 @@
+{View, SelectListView} = require 'atom-space-pen-views'
+fs = require 'fs'
+path = require 'path'
+tilde = require 'expand-tilde'
+
 module.exports =
-class QuickNavigateView
-  constructor: (serializedState) ->
-    # Create root element
-    @element = document.createElement('div')
-    @element.classList.add('quick-navigate')
+class QuickNavigateView extends SelectListView
+    initialize: ->
+        super
+        @addClass('command-palette')
+        atom.commands.add 'atom-workspace', 'quick-navigate:toggle', => @toggle()
 
-    # Create message element
-    message = document.createElement('div')
-    message.textContent = "The QuickNavigate package is Alive! It's ALIVE!"
-    message.classList.add('message')
-    @element.appendChild(message)
+    viewForItem: (item) ->
+        "<li>#{item}</li>"
 
-  # Returns an object that can be retrieved when package is activated
-  serialize: ->
+    confirmed: (item) ->
+        @cancel()
 
-  # Tear down any state and detach
-  destroy: ->
-    @element.remove()
+    cancelled: ->
+        @hide()
 
-  getElement: ->
-    @element
+    show: ->
+
+        @setItems(["1", "2"])
+        @populateList()
+
+        @panel ?= atom.workspace.addModalPanel(item: this)
+        @panel.show()
+        @storeFocusedElement()
+
+        @focusFilterEditor()
+
+    hide: ->
+        @panel?.hide()
+
+    toggle: ->
+        if @panel?.isVisible()
+            @cancel()
+        else
+            @show()

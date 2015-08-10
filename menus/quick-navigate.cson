@@ -1,19 +1,12 @@
 # See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
-'context-menu':
-  'atom-text-editor': [
-    {
-      'label': 'Toggle quick-navigate'
-      'command': 'quick-navigate:toggle'
-    }
-  ]
 'menu': [
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'quick-navigate'
+      'label': 'Quick Navigate'
       'submenu': [
         {
-          'label': 'Toggle'
+          'label': 'Navigate History'
           'command': 'quick-navigate:toggle'
         }
       ]
