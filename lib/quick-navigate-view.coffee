@@ -1,7 +1,4 @@
 {View, SelectListView} = require 'atom-space-pen-views'
-fs = require 'fs'
-path = require 'path'
-tilde = require 'expand-tilde'
 
 module.exports =
 class QuickNavigateView extends SelectListView
@@ -10,22 +7,19 @@ class QuickNavigateView extends SelectListView
 
         @addClass('command-palette')
         atom.commands.add 'atom-workspace', 'quick-navigate:toggle', => @toggle()
-        #atom.workspace.observeActivePaneItem (item) =>
-        #    console.log item
 
     viewForItem: (item) ->
-        console.log item
-        "<li>#{item.getURI()}</li>"
+        "<li>#{item}</li>"
 
     confirmed: (item) ->
-        atom.workspace.open(item.getURI())
+        atom.workspace.open(item)
         @cancel()
 
     cancelled: ->
         @hide()
 
     show: ->
-        @setItems(atom.workspace.getPaneItems())
+        @setItems(atom.workspace.getPaneItems().map((m) => m.getURI()))
         @populateList()
 
         @panel ?= atom.workspace.addModalPanel(item: this)
